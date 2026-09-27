@@ -11,20 +11,16 @@ Codex plugin for local Joplin notes, notebook search, tag search, generic Joplin
 
 ## Install
 
-### Codex local marketplace
-
-```bash
-git clone https://github.com/Nehoko/joplin-curl.git
-cd joplin-curl
+Download the 
+```filepath
+joplin-curl-plugin.zip
 ```
 
-Open Codex in cloned repo, then:
+Open Codex, then head to plugins:
+click on Add -> Upload plugin archive, then upload the zip.
 
-1. open `/plugins`
-2. search `Joplin Curl`
-3. install local plugin from marketplace
+Press install on the new marketplace page
 
-Repo ships local marketplace metadata in `.agents/plugins/marketplace.json` and plugin bundle in `plugins/joplin-curl/`.
 
 ## Configure Joplin Data API
 
@@ -42,75 +38,45 @@ In Joplin desktop:
 3. enable clipper service
 4. copy auth token
 
-### 2. Point helper at bundled CLI
+### 2. Create the config file
 
-From repo root:
+In explorer open
 
-```bash
-export JOPLIN_API_PY="$(pwd)/scripts/joplin_api.py"
+```filepath
+%YOURUSERFOLDER%/.codex/plugins/cache/created-by-me-remote/joplin-curl/%version%
 ```
 
-If you want plugin-bundle path instead:
-
-```bash
-export JOPLIN_API_PY="$(pwd)/plugins/joplin-curl/scripts/joplin_api.py"
+Create a folder named:
+```filepath
+data
 ```
 
-### 3. Save connection settings once
-
-```bash
-python3 "$JOPLIN_API_PY" set-config \
-  --base-url http://127.0.0.1 \
-  --port 41184 \
-  --token YOUR_TOKEN
+And a file named:
+```filepath
+joplin-config.json
+```
+Add this:
+```json
+{
+  "base_url": "http://127.0.0.1",
+  "port": 41184,
+  "token": "YOURJOPLINTOKEN"
+}
 ```
 
-### 4. Verify
-
-```bash
-python3 "$JOPLIN_API_PY" show-config
-python3 "$JOPLIN_API_PY" ping
+### 3. Test in codex
+Open codex and type:
+```text
+@joplin-curl Create a notebook named "Test" and a note named "Hello World" with the content being:
+"Codex wrote this"
 ```
+
 
 ## Included skills
 
 - `joplin-notes` - search, read, create, update, and move Joplin notes, list or search notebooks, search tags, fall back to generic API requests, or run one-shot Joplin Terminal commands
 - `joplin-llm-wiki` - maintain `LLM Wiki` notebooks with schema-first workflow
 - `joplin-llm-wiki-create` - scaffold fresh Joplin wiki notebook tree and starter notes
-
-## Common commands
-
-```bash
-python3 "$JOPLIN_API_PY" list-notebooks
-python3 "$JOPLIN_API_PY" search --query "weekly review"
-python3 "$JOPLIN_API_PY" get-note --note-id NOTE_ID
-python3 "$JOPLIN_API_PY" create-note --title "Daily log" --body "..."
-python3 "$JOPLIN_API_PY" update-note --note-id NOTE_ID --title "Updated"
-python3 "$JOPLIN_API_PY" request --method GET --path /tags --query fields=id,title
-```
-
-## Joplin Terminal mode
-
-Joplin Terminal can run commands directly from a shell, so Codex can execute a command and let the process exit without keeping Joplin Desktop open or Web Clipper enabled. Install it using the official [Joplin Terminal Application](https://joplinapp.org/help/apps/terminal/) instructions, then check it:
-
-```bash
-python3 "$JOPLIN_API_PY" check-terminal
-```
-
-Run one-shot Terminal commands by passing arguments after `terminal --`:
-
-```bash
-python3 "$JOPLIN_API_PY" terminal -- mkbook "My notebook"
-python3 "$JOPLIN_API_PY" terminal -- use "My notebook"
-python3 "$JOPLIN_API_PY" terminal -- mknote "My note"
-python3 "$JOPLIN_API_PY" terminal -- ls -l
-python3 "$JOPLIN_API_PY" terminal -- cat "My note"
-python3 "$JOPLIN_API_PY" terminal -- set NOTE_ID title "New title"
-python3 "$JOPLIN_API_PY" terminal -- mv NOTE_ID "Archive"
-python3 "$JOPLIN_API_PY" terminal -- rmnote -f NOTE_ID
-```
-
-Use Data API mode when Joplin Desktop and Web Clipper are already running and JSON output is useful. Use Terminal mode when a one-shot local CLI command is enough.
 
 ## Repo layout
 
